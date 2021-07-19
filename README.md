@@ -13,7 +13,11 @@
 8. Run the script in a Xcode Playground
 9. See the terminal output
 
-**Sample Input:**
+**Script:**
+```
+import Foundation
+
+var data = """
 iOS 14.5.1,327524
 iOS 14.2,528090
 iOS 14.3,524143
@@ -43,13 +47,52 @@ iOS 11.0.2,1310
 iOS 12.3.2,866
 iOS 9.2,19
 iOS 10.0,918
+"""
 
-**Sample Output**
-Total Users: 1542866
-Total Supported Users: 1541347
+/*
+TotalUsers : Total users who have used app within the given timeframe
+TotalSupportedUsers : Subset from TotalUsers who lie withing minSupportedVersion & currentVersion
+*/
 
-Supported Version Distribution
-ios 13: 7.17%
-ios 14: 89.52%
-ios 12: 3.13%
-ios 11: 0.18%
+let lines = data.split { $0.isNewline }
+
+let minSupportedVersion = "11"
+let currentVersion = "14"
+
+var totalUsers = 0
+var totalSupportedUsers = 0
+
+var supportedUsersDictionary: [String: Int] = [:]
+
+for line in lines {
+    let iOSVersion: String = String(line.split(separator: ".").first!).lowercased()
+    let userCount: Int = Int(line.split(separator: ",")[1])!
+    totalUsers += userCount
+    let versionNumber: String = String(iOSVersion.split(separator: " ")[1])
+    if versionNumber <= currentVersion && versionNumber >= minSupportedVersion {
+        totalSupportedUsers += userCount
+        supportedUsersDictionary[iOSVersion, default: 0] += userCount
+    }
+}
+
+print("Total Users: \(totalUsers)")
+print("Total Supported Users: \(totalSupportedUsers)\n")
+print("Supported Version Distribution")
+
+for (iOSVersion, numberOfUsers) in supportedUsersDictionary {
+    let percent = String(format: "%.2f", Double(numberOfUsers) / Double(totalSupportedUsers) * Double(100))
+    print("\(iOSVersion): \(percent)%")
+}
+```
+
+**Sample Output:**
+```
+ Total Users: 1542866
+ Total Supported Users: 1541347
+ 
+ Supported Version Distribution
+ ios 11: 0.18%
+ ios 12: 3.13%
+ ios 13: 7.17%
+ ios 14: 89.52%
+```
