@@ -10,7 +10,7 @@
 5. Open the file and select the iOS breakdown raw data
 6. Replace your data with the sample data in this script
 7. Set `minSupportedVersion` and `currentVersion` as per requirement
-8. Run the script in a Xcode Playground
+8. Run the script in a Xcode Playground / online swift compiler
 9. See the terminal output
 
 **Script:**
@@ -19,9 +19,9 @@ import Foundation
 
 var data = """
 iOS 14.5.1,327524
-iOS 14.2,528090
+iOS 15.0.1,528090
 iOS 14.3,524143
-iOS 13.1.3,38215
+iOS 15.0,38215
 iOS 13.1.3,14333
 iOS 13.2.3,12667
 iOS 13.2.3,9568
@@ -57,7 +57,7 @@ TotalSupportedUsers : Subset from TotalUsers who lie withing minSupportedVersion
 let lines = data.split { $0.isNewline }
 
 let minSupportedVersion = "11"
-let currentVersion = "14"
+let currentVersion = "15"
 
 var totalUsers = 0
 var totalSupportedUsers = 0
